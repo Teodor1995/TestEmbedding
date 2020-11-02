@@ -1,0 +1,10 @@
+rootProject.name = "TestEmbedding"
+include ':app'
+
+setBinding(new Binding([gradle: this]))
+evaluate(new File(
+        settingsDir.parentFile,
+        'TestEmbedding/flutter_module/.android/include_flutter.groovy'
+))
+//ниже - автогенерация кода
+include ':flutter_module'

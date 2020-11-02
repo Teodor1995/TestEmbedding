@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">TestEmbedding</string>
+    <string translatable="false" name="start_flutter_activity">Flutter Activity</string>
+    <string translatable="false" name="start_pre_warmed_flutter_activity">PreWarmed Flutter Activity</string>
+    <string translatable="false" name="next">Далее</string>
+    <string translatable="false" name="start_flutter_fragment">Flutter Fragment</string>
+    <string translatable="false" name="start_pre_warmed_flutter_fragment">PreWarmed Flutter Fragment</string>
+</resources>
