@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_module/pigeon.dart';
 
 void main() => runApp(MyApp());
 
@@ -31,11 +32,15 @@ class _MyHomePageState extends State<MyHomePage> {
   static const String nameChannel = 'ru.test.embedding/hello';
   static const platform = const MethodChannel(nameChannel);
 
+  SearchRequest request = SearchRequest()..query = "Aaron";
+  Api api = Api();
+
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
-    platform.invokeMapMethod("counter", _counter);
+    api.search(request);
+    // platform.invokeMapMethod("counter", _counter);
   }
 
   @override

@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
+import dev.flutter.pigeon.Pigeon
 import io.flutter.embedding.android.FlutterFragment
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
@@ -19,7 +20,7 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 
-class SecondFragment : Fragment() {
+class SecondFragment : Fragment(), Pigeon.Api {
 
     companion object {
         const val engineId = "my_engine_id"
@@ -48,7 +49,8 @@ class SecondFragment : Fragment() {
         FlutterEngineCache
             .getInstance()
             .put(engineId, flutterEngine)
-        /**          ******             */
+
+
         /** канал для общения с модулем */
         val CHANNEL = "ru.test.embedding/hello"
         val methodChannel = MethodChannel(
@@ -62,6 +64,10 @@ class SecondFragment : Fragment() {
                 Toast.LENGTH_LONG
             ).show()
         }
+
+
+        /** PIGEON */
+        Pigeon.Api.setup(flutterEngine.dartExecutor.binaryMessenger, this)
         /**  ******   */
 
         btnStartPreWarmedFlutterFragment.setOnClickListener {
@@ -76,5 +82,15 @@ class SecondFragment : Fragment() {
         }
     }
 
+    override fun search(request: Pigeon.SearchRequest): Pigeon.SearchReply {
+        val reply = Pigeon.SearchReply()
+        reply.result = String.format("Hi %s!", request.query)
+        Toast.makeText(
+            context,
+            String.format("Hi %s!", request.query),
+            Toast.LENGTH_LONG
+        ).show()
+        return reply
+    }
 
 }
