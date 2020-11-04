@@ -54,7 +54,7 @@ class FirstFragment : Fragment() {
         }
 
         btnNext.setOnClickListener {
-            (requireActivity() as MainActivity).addFragment(SecondFragment())
+            requireActivity().addFragment(SecondFragment())
         }
     }
 
