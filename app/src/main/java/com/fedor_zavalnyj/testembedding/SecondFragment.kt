@@ -58,11 +58,7 @@ class SecondFragment : Fragment(), Pigeon.Api {
             CHANNEL
         )
         methodChannel.setMethodCallHandler { call, result ->
-            Toast.makeText(
-                requireContext(),
-                "${call.method} ${call.arguments}",
-                Toast.LENGTH_LONG
-            ).show()
+            showToast("${call.method} ${call.arguments}")
         }
 
 
@@ -83,9 +79,13 @@ class SecondFragment : Fragment(), Pigeon.Api {
     }
 
     override fun notifyNative(bundle: Pigeon.Bundle) {
+        showToast("flutter вернул ${bundle.count}")
+    }
+
+    private fun showToast(message:String){
         Toast.makeText(
             context,
-            "flutter вернул ${bundle.count}",
+            message,
             Toast.LENGTH_LONG
         ).show()
     }
