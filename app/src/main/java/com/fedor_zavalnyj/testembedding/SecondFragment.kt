@@ -82,15 +82,12 @@ class SecondFragment : Fragment(), Pigeon.Api {
         }
     }
 
-    override fun search(request: Pigeon.SearchRequest): Pigeon.SearchReply {
-        val reply = Pigeon.SearchReply()
-        reply.result = String.format("Hi %s!", request.query)
+    override fun notifyNative(bundle: Pigeon.Bundle) {
         Toast.makeText(
             context,
-            String.format("Hi %s!", request.query),
+            "flutter вернул ${bundle.count}",
             Toast.LENGTH_LONG
         ).show()
-        return reply
     }
 
 }

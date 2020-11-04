@@ -31,28 +31,28 @@ class _MyHomePageState extends State<MyHomePage> {
   String text = "no action call";
   static const String nameChannel = 'ru.test.embedding/hello';
   static const platform = const MethodChannel(nameChannel);
-
-  SearchRequest request = SearchRequest()..query = "Aaron";
   Api api = Api();
 
   void _incrementCounter() {
     setState(() {
       _counter++;
     });
-    api.search(request);
-    // platform.invokeMapMethod("counter", _counter);
+    Bundle bundle = Bundle()..count = _counter;
+    api.notifyNative(bundle);
   }
 
   @override
   void initState() {
     platform.setMethodCallHandler((call) {
-      switch(call.method){
-        case "hello":{
-          setState(() {
-            text = text + "\nmethod=${call.method}, arguments=${call.arguments}";
-            pushHelloMessage();
-          });
-        }
+      switch (call.method) {
+        case "hello":
+          {
+            setState(() {
+              text =
+                  text + "\nmethod=${call.method}, arguments=${call.arguments}";
+              pushHelloMessage();
+            });
+          }
       }
       var result;
       return result;

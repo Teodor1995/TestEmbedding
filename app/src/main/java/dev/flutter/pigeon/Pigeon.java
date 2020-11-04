@@ -14,60 +14,41 @@ import java.util.HashMap;
 public class Pigeon {
 
   /** Generated class from Pigeon that represents data sent in messages. */
-  public static class SearchReply {
-    private String result;
-    public String getResult() { return result; }
-    public void setResult(String setterArg) { this.result = setterArg; }
+  public static class Bundle {
+    private Long count;
+    public Long getCount() { return count; }
+    public void setCount(Long setterArg) { this.count = setterArg; }
 
     HashMap toMap() {
       HashMap<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("result", result);
+      toMapResult.put("count", count);
       return toMapResult;
     }
-    static SearchReply fromMap(HashMap map) {
-      SearchReply fromMapResult = new SearchReply();
-      Object result = map.get("result");
-      fromMapResult.result = (String)result;
-      return fromMapResult;
-    }
-  }
-
-  /** Generated class from Pigeon that represents data sent in messages. */
-  public static class SearchRequest {
-    private String query;
-    public String getQuery() { return query; }
-    public void setQuery(String setterArg) { this.query = setterArg; }
-
-    HashMap toMap() {
-      HashMap<String, Object> toMapResult = new HashMap<>();
-      toMapResult.put("query", query);
-      return toMapResult;
-    }
-    static SearchRequest fromMap(HashMap map) {
-      SearchRequest fromMapResult = new SearchRequest();
-      Object query = map.get("query");
-      fromMapResult.query = (String)query;
+    static Bundle fromMap(HashMap map) {
+      Bundle fromMapResult = new Bundle();
+      Object count = map.get("count");
+      fromMapResult.count = (count == null) ? null : ((count instanceof Integer) ? (Integer)count : (Long)count);
       return fromMapResult;
     }
   }
 
   /** Generated interface from Pigeon that represents a handler of messages from Flutter.*/
   public interface Api {
-    SearchReply search(SearchRequest arg);
+    void notifyNative(Bundle arg);
 
     /** Sets up an instance of `Api` to handle messages through the `binaryMessenger` */
     static void setup(BinaryMessenger binaryMessenger, Api api) {
       {
         BasicMessageChannel<Object> channel =
-            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.Api.search", new StandardMessageCodec());
+            new BasicMessageChannel<>(binaryMessenger, "dev.flutter.pigeon.Api.notifyNative", new StandardMessageCodec());
         if (api != null) {
           channel.setMessageHandler((message, reply) -> {
             HashMap<String, HashMap> wrapped = new HashMap<>();
             try {
               @SuppressWarnings("ConstantConditions")
-              SearchRequest input = SearchRequest.fromMap((HashMap)message);
-              SearchReply output = api.search(input);
-              wrapped.put("result", output.toMap());
+              Bundle input = Bundle.fromMap((HashMap)message);
+              api.notifyNative(input);
+              wrapped.put("result", null);
             }
             catch (Exception exception) {
               wrapped.put("error", wrapError(exception));

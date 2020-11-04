@@ -6,43 +6,27 @@ import 'dart:async';
 import 'package:flutter/services.dart';
 import 'dart:typed_data' show Uint8List, Int32List, Int64List, Float64List;
 
-class SearchReply {
-  String result;
+class Bundle {
+  int count;
   // ignore: unused_element
   Map<dynamic, dynamic> _toMap() {
     final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
-    pigeonMap['result'] = result;
+    pigeonMap['count'] = count;
     return pigeonMap;
   }
   // ignore: unused_element
-  static SearchReply _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final SearchReply result = SearchReply();
-    result.result = pigeonMap['result'];
-    return result;
-  }
-}
-
-class SearchRequest {
-  String query;
-  // ignore: unused_element
-  Map<dynamic, dynamic> _toMap() {
-    final Map<dynamic, dynamic> pigeonMap = <dynamic, dynamic>{};
-    pigeonMap['query'] = query;
-    return pigeonMap;
-  }
-  // ignore: unused_element
-  static SearchRequest _fromMap(Map<dynamic, dynamic> pigeonMap) {
-    final SearchRequest result = SearchRequest();
-    result.query = pigeonMap['query'];
+  static Bundle _fromMap(Map<dynamic, dynamic> pigeonMap) {
+    final Bundle result = Bundle();
+    result.count = pigeonMap['count'];
     return result;
   }
 }
 
 class Api {
-  Future<SearchReply> search(SearchRequest arg) async {
+  Future<void> notifyNative(Bundle arg) async {
     final Map<dynamic, dynamic> requestMap = arg._toMap();
     const BasicMessageChannel<dynamic> channel =
-        BasicMessageChannel<dynamic>('dev.flutter.pigeon.Api.search', StandardMessageCodec());
+        BasicMessageChannel<dynamic>('dev.flutter.pigeon.Api.notifyNative', StandardMessageCodec());
     
     final Map<dynamic, dynamic> replyMap = await channel.send(requestMap);
     if (replyMap == null) {
@@ -57,7 +41,7 @@ class Api {
           message: error['message'],
           details: error['details']);
     } else {
-      return SearchReply._fromMap(replyMap['result']);
+      // noop
     }
     
   }

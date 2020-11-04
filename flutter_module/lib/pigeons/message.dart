@@ -1,16 +1,20 @@
 import 'package:pigeon/pigeon_lib.dart';
 
-class SearchRequest {
-  String query;
+// flutter pub run pigeon --input lib/pigeons/message.dart --dart_out lib/pigeon.dart --java_out ../../TestEmbedding/app/src/main/java/dev/flutter/pigeon/Pigeon.java --java_package "dev.flutter.pigeon"
+
+class Bundle {
+  final int count;
+
+  const Bundle(this.count);
 }
 
-class SearchReply {
-  String result;
+class CounterResponse {
+  final Bundle bundle;
+
+  const CounterResponse(this.bundle);
 }
 
 @HostApi()
 abstract class Api {
-  SearchReply search(SearchRequest request);
+  void notifyNative(Bundle bundle);
 }
-
-// flutter pub run pigeon --input lib/pigeons/message.dart --dart_out lib/pigeon.dart --java_out ../../TestEmbedding/app/src/main/java/dev/flutter/pigeon/Pigeon.java --java_package "dev.flutter.pigeon"
