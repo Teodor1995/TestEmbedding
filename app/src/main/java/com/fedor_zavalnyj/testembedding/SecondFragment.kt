@@ -1,13 +1,17 @@
 package com.fedor_zavalnyj.testembedding
 
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import dev.flutter.pigeon.Pigeon
+import io.flutter.embedding.android.DrawableSplashScreen
 import io.flutter.embedding.android.FlutterFragment
+import io.flutter.embedding.android.SplashScreen
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.embedding.engine.FlutterEngineCache
 import io.flutter.embedding.engine.dart.DartExecutor
@@ -20,10 +24,16 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.TimeUnit
 
 
-class SecondFragment : Fragment(), Pigeon.Api {
+class SecondFragment : FlutterFragment(), Pigeon.Api {
 
     companion object {
         const val engineId = "my_engine_id"
+    }
+
+    override fun provideSplashScreen(): SplashScreen? {
+        val splash: Drawable =
+            ContextCompat.getDrawable(requireContext(), R.drawable.splash)!!
+        return DrawableSplashScreen(splash)
     }
 
     override fun onCreateView(
@@ -58,18 +68,35 @@ class SecondFragment : Fragment(), Pigeon.Api {
             CHANNEL
         )
         methodChannel.setMethodCallHandler { call, result ->
-            showToast("${call.method} ${call.arguments}")
+            val messageText = "${call.method} ${call.arguments}"
+            showToast(messageText)
+            tvAnswer.text = messageText
         }
 
 
         /** PIGEON */
         Pigeon.Api.setup(flutterEngine.dartExecutor.binaryMessenger, this)
         /**  ******   */
+        val flutterFragment: FlutterFragment = withCachedEngine(engineId).build()
+        hideView()
+        addView(flutterFragment)
 
         btnStartPreWarmedFlutterFragment.setOnClickListener {
-            val flutterFragment: FlutterFragment =
-                FlutterFragment.withCachedEngine(engineId).build()
             requireActivity().addFragment(flutterFragment)
+            GlobalScope.launch(Dispatchers.Main) {
+                delay(TimeUnit.SECONDS.toMillis(3))
+                //Methods marked with @UiThread must be executed on the main thread.
+                methodChannel.invokeMethod("hello", "from android")
+            }
+        }
+
+        btnStartPreWarmedFlutterFragment.setOnClickListener {
+            val flutterFragment: FlutterFragment = withCachedEngine(engineId).build()
+            requireActivity().addFragment(flutterFragment)
+        }
+
+        btnStartFlutterView.setOnClickListener {
+            showView()
             GlobalScope.launch(Dispatchers.Main) {
                 delay(TimeUnit.SECONDS.toMillis(3))
                 //Methods marked with @UiThread must be executed on the main thread.
@@ -78,16 +105,20 @@ class SecondFragment : Fragment(), Pigeon.Api {
         }
     }
 
+    private fun showView(){
+        viewContainer.translationX = 0f
+    }
+    private fun hideView(){
+        viewContainer.translationX = 10000f
+    }
+
     override fun notifyNative(bundle: Pigeon.Bundle) {
         showToast("flutter вернул ${bundle.count}")
     }
 
-    private fun showToast(message:String){
-        Toast.makeText(
-            context,
-            message,
-            Toast.LENGTH_LONG
-        ).show()
+    private fun showToast(message: String) {
+        Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
+
 
 }

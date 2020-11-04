@@ -1,10 +1,10 @@
 package com.fedor_zavalnyj.testembedding
 
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import io.flutter.embedding.android.FlutterFragment
 
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
     val fragmentTransaction = beginTransaction()
@@ -23,12 +23,19 @@ fun FragmentActivity.addFragment(
     }
 }
 
-fun FragmentActivity.replaceFragment(
+
+inline fun FragmentManager.inTransactionFr(func: FragmentTransaction.() -> Unit) {
+    val fragmentTransaction = beginTransaction()
+    fragmentTransaction.func()
+    fragmentTransaction.commit()
+}
+
+fun FlutterFragment.addView(
     fragment: Fragment,
     addToBackStack: Boolean = true
 ) {
-    (this as AppCompatActivity).supportFragmentManager.inTransaction {
-        replace(R.id.root_container, fragment)
+    childFragmentManager.inTransactionFr {
+        add(R.id.viewContainer, fragment)
         if (addToBackStack)
             addToBackStack(fragment::class.simpleName)
     }
