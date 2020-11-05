@@ -14,7 +14,7 @@ profile
 
 DerivedData/
 
-.generated/
+#.generated/
 
 *.pbxuser
 *.mode1v3
@@ -36,7 +36,7 @@ Icon?
 .tags*
 
 build/
-.android/
+#.android/
 .ios/
 .flutter-plugins
 .flutter-plugins-dependencies
