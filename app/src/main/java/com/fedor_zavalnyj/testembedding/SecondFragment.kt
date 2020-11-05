@@ -30,12 +30,6 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
         const val engineId = "my_engine_id"
     }
 
-    override fun provideSplashScreen(): SplashScreen? {
-        val splash: Drawable =
-            ContextCompat.getDrawable(requireContext(), R.drawable.splash)!!
-        return DrawableSplashScreen(splash)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -77,9 +71,11 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
         /** PIGEON */
         Pigeon.Api.setup(flutterEngine.dartExecutor.binaryMessenger, this)
         /**  ******   */
-        val flutterFragment: FlutterFragment = withCachedEngine(engineId).build()
-        hideView()
-        addView(flutterFragment)
+        val flutterFragment: FlutterFragment =
+            withCachedEngine(engineId)
+                .shouldAttachEngineToActivity(false)
+                .build()
+
 
         btnStartPreWarmedFlutterFragment.setOnClickListener {
             requireActivity().addFragment(flutterFragment)
@@ -88,28 +84,16 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
                 //Methods marked with @UiThread must be executed on the main thread.
                 methodChannel.invokeMethod("hello", "from android")
             }
-        }
-
-        btnStartPreWarmedFlutterFragment.setOnClickListener {
-            val flutterFragment: FlutterFragment = withCachedEngine(engineId).build()
-            requireActivity().addFragment(flutterFragment)
         }
 
         btnStartFlutterView.setOnClickListener {
-            showView()
+            addView(flutterFragment)
             GlobalScope.launch(Dispatchers.Main) {
                 delay(TimeUnit.SECONDS.toMillis(3))
                 //Methods marked with @UiThread must be executed on the main thread.
                 methodChannel.invokeMethod("hello", "from android")
             }
         }
-    }
-
-    private fun showView(){
-        viewContainer.translationX = 0f
-    }
-    private fun hideView(){
-        viewContainer.translationX = 10000f
     }
 
     override fun notifyNative(bundle: Pigeon.Bundle) {

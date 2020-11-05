@@ -32,6 +32,8 @@ class _MyHomePageState extends State<MyHomePage> {
   static const String nameChannel = 'ru.test.embedding/hello';
   static const platform = const MethodChannel(nameChannel);
   Api api = Api();
+  static const String loaderChannel = 'ru.test.embedding/isReady';
+  static const loaderPlatformChannel = const MethodChannel(loaderChannel);
 
   void _incrementCounter() {
     setState(() {
@@ -43,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   void initState() {
+    pushReadyMessage();
     platform.setMethodCallHandler((call) {
       switch (call.method) {
         case "hello":
@@ -62,6 +65,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
 
     super.initState();
+  }
+
+  void pushReadyMessage() async {
+    await Future.delayed(Duration(seconds: 1));
+    loaderPlatformChannel.invokeListMethod("ready");
   }
 
   void pushHelloMessage() async {
