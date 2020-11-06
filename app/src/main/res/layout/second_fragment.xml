@@ -23,7 +23,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="15dp"
         android:text="@string/start_pre_warmed_flutter_fragment_white"
-        android:textSize="12dp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnStartFlutterFragment" />
@@ -34,7 +34,7 @@
         android:layout_height="60dp"
         android:layout_marginTop="15dp"
         android:text="@string/start_pre_warmed_flutter_fragment_blue"
-        android:textSize="12dp"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnStartPreWarmedFlutterFragmentWhite" />
@@ -67,7 +67,7 @@
         android:layout_marginTop="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btnStartFlutterViewWhite"
-        tools:context=".MainActivity"></FrameLayout>
+        tools:context=".MainActivity"/>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

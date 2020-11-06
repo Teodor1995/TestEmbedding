@@ -68,8 +68,8 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
 
     private fun registerEnginesAndChannels() {
         /**      Предпрогрев flutter engines      */
-        initFlutterEngine("/blue_screen")
-        val engineWhiteScreen = initFlutterEngine("/white_screen")
+        initFlutterEngine(engineId_blue, "/blue_screen")
+        val engineWhiteScreen = initFlutterEngine(engineId_white, "/white_screen")
 
         /** канал для общения с модулем (для white screen)*/
         val CHANNEL = "ru.test.embedding/hello"
@@ -94,13 +94,14 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
             .build()
     }
 
-    private fun initFlutterEngine(initialRoute: String): FlutterEngine {
+    private fun initFlutterEngine(engineId: String, initialRoute: String = ""): FlutterEngine {
         val engine = FlutterEngine(requireContext())
-        engine.navigationChannel.setInitialRoute(initialRoute)
+        if (initialRoute.isNotEmpty())
+            engine.navigationChannel.setInitialRoute(initialRoute)
         engine.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
         FlutterEngineCache
             .getInstance()
-            .put(engineId_white, engine)
+            .put(engineId, engine)
         return engine
     }
 
