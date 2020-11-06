@@ -4,8 +4,8 @@
     <string translatable="false" name="start_pre_warmed_flutter_activity">PreWarmed Flutter Activity</string>
     <string translatable="false" name="next">Далее</string>
     <string translatable="false" name="start_flutter_fragment">Flutter Fragment</string>
-    <string translatable="false" name="start_pre_warmed_flutter_fragment">PreWarmed Flutter Fragment</string>
-    <string translatable="false" name="start_flutter_view">Flutter View</string>
-    <string translatable="false" name="pushActionToFlutter">Отправить событие во Flutter</string>
+    <string translatable="false" name="start_pre_warmed_flutter_fragment_white">PreWarmed Flutter Fragment (WHITE)</string>
+    <string translatable="false" name="start_pre_warmed_flutter_fragment_blue">PreWarmed Flutter Fragment (BLUE)</string>
+    <string translatable="false" name="start_flutter_view_white">Flutter View</string>
     <string translatable="false" name="answer_label">Здесь будет ответ от Flutter</string>
 </resources>

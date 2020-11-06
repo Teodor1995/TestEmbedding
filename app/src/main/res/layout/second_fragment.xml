@@ -4,10 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:paddingTop="100dp"
-    tools:context=".MainActivity"
     android:background="?attr/backgroundColor"
-    >
+    android:paddingTop="100dp"
+    tools:context=".MainActivity">
 
     <Button
         android:id="@+id/btnStartFlutterFragment"
@@ -19,46 +18,56 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/btnStartPreWarmedFlutterFragment"
+        android:id="@+id/btnStartPreWarmedFlutterFragmentWhite"
         android:layout_width="250dp"
         android:layout_height="60dp"
         android:layout_marginTop="15dp"
-        android:text="@string/start_pre_warmed_flutter_fragment"
+        android:text="@string/start_pre_warmed_flutter_fragment_white"
+        android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btnStartFlutterFragment" />
 
     <Button
-        android:id="@+id/btnStartFlutterView"
+        android:id="@+id/btnStartPreWarmedFlutterFragmentBlue"
         android:layout_width="250dp"
         android:layout_height="60dp"
         android:layout_marginTop="15dp"
-        android:text="@string/start_flutter_view"
+        android:text="@string/start_pre_warmed_flutter_fragment_blue"
+        android:textSize="12dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btnStartPreWarmedFlutterFragment" />
+        app:layout_constraintTop_toBottomOf="@id/btnStartPreWarmedFlutterFragmentWhite" />
+
+    <Button
+        android:id="@+id/btnStartFlutterViewWhite"
+        android:layout_width="250dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="15dp"
+        android:text="@string/start_flutter_view_white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btnStartPreWarmedFlutterFragmentBlue" />
+
 
     <TextView
+        android:id="@+id/tvAnswer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/answer_label"
-        android:id="@+id/tvAnswer"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartFlutterView"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
         android:layout_marginTop="15dp"
-        />
+        android:text="@string/answer_label"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btnStartFlutterViewWhite" />
 
     <FrameLayout
+        android:id="@+id/viewContainer"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        tools:context=".MainActivity"
-        android:id="@+id/viewContainer"
         android:layout_marginTop="150dp"
-        app:layout_constraintTop_toBottomOf="@+id/btnStartFlutterView"
         app:layout_constraintBottom_toBottomOf="parent"
-        >
-    </FrameLayout>
+        app:layout_constraintTop_toBottomOf="@+id/btnStartFlutterViewWhite"
+        tools:context=".MainActivity"></FrameLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
