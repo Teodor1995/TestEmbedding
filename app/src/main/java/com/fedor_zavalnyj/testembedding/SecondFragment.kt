@@ -72,10 +72,9 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
         val engineWhiteScreen = initFlutterEngine(engineId_white, "/white_screen")
 
         /** канал для общения с модулем (для white screen)*/
-        val CHANNEL = "ru.test.embedding/hello"
         methodChannel = MethodChannel(
             engineWhiteScreen.dartExecutor.binaryMessenger,
-            CHANNEL
+            "ru.test.embedding/hello"
         )
         methodChannel.setMethodCallHandler { call, result ->
             val messageText = "${call.method} ${call.arguments}"
