@@ -22,6 +22,8 @@ import java.util.concurrent.TimeUnit
 
 class SecondFragment : FlutterFragment(), Pigeon.Api {
 
+    private lateinit var methodChannel: MethodChannel
+
     companion object {
         const val engineId_white = "my_engine_id_white"
         const val engineId_blue = "my_engine_id_blue"
@@ -39,31 +41,40 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        registerEnginesAndChannels()
+
         btnStartFlutterFragment.setOnClickListener {
             val flutterFragment: Fragment = createDefault()
             requireActivity().addFragment(flutterFragment)
         }
 
+        btnStartPreWarmedFlutterFragmentWhite.setOnClickListener {
+            val flutterFragment: FlutterFragment = getFlutterFragmentInstance(engineId_white)
+            requireActivity().addFragment(flutterFragment)
+            pushMessageToFlutterAfterLaunch()
+        }
+
+        btnStartPreWarmedFlutterFragmentBlue.setOnClickListener {
+            val flutterFragment: FlutterFragment = getFlutterFragmentInstance(engineId_blue)
+            requireActivity().addFragment(flutterFragment)
+        }
+
+        btnStartFlutterViewWhite.setOnClickListener {
+            val flutterFragment: FlutterFragment = getFlutterFragmentInstance(engineId_white)
+            addView(flutterFragment)
+            pushMessageToFlutterAfterLaunch()
+        }
+    }
+
+    private fun registerEnginesAndChannels() {
         /**      Предпрогрев flutter engines      */
-        val flutterEngineForWhiteScreen = FlutterEngine(requireContext())
-        flutterEngineForWhiteScreen.navigationChannel.setInitialRoute("/white_screen");
-        flutterEngineForWhiteScreen.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
-        FlutterEngineCache
-            .getInstance()
-            .put(engineId_white, flutterEngineForWhiteScreen)
-
-        val flutterEngineForBlueScreen = FlutterEngine(requireContext())
-        flutterEngineForBlueScreen.navigationChannel.setInitialRoute("/blue_screen");
-        flutterEngineForBlueScreen.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
-        FlutterEngineCache
-            .getInstance()
-            .put(engineId_blue, flutterEngineForBlueScreen)
-
+        initFlutterEngine("/blue_screen")
+        val engineWhiteScreen = initFlutterEngine("/white_screen")
 
         /** канал для общения с модулем (для white screen)*/
         val CHANNEL = "ru.test.embedding/hello"
-        val methodChannel = MethodChannel(
-            flutterEngineForWhiteScreen.dartExecutor.binaryMessenger,
+        methodChannel = MethodChannel(
+            engineWhiteScreen.dartExecutor.binaryMessenger,
             CHANNEL
         )
         methodChannel.setMethodCallHandler { call, result ->
@@ -72,43 +83,33 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
             tvAnswer.text = messageText
         }
 
-
         /** PIGEON */
-        Pigeon.Api.setup(flutterEngineForWhiteScreen.dartExecutor.binaryMessenger, this)
+        Pigeon.Api.setup(engineWhiteScreen.dartExecutor.binaryMessenger, this)
         /**  ******   */
+    }
 
-        btnStartPreWarmedFlutterFragmentWhite.setOnClickListener {
-            val flutterFragment: FlutterFragment =
-                withCachedEngine(engineId_white)
-                    .shouldAttachEngineToActivity(false)
-                    .build()
-            requireActivity().addFragment(flutterFragment)
-            GlobalScope.launch(Dispatchers.Main) {
-                delay(TimeUnit.SECONDS.toMillis(3))
-                //Methods marked with @UiThread must be executed on the main thread.
-                methodChannel.invokeMethod("hello", "from android")
-            }
-        }
+    private fun getFlutterFragmentInstance(engineId: String): FlutterFragment {
+        return withCachedEngine(engineId)
+            .shouldAttachEngineToActivity(false)
+            .build()
+    }
 
-        btnStartPreWarmedFlutterFragmentBlue.setOnClickListener {
-            val flutterFragment: FlutterFragment =
-                withCachedEngine(engineId_blue)
-                    .shouldAttachEngineToActivity(false)
-                    .build()
-            requireActivity().addFragment(flutterFragment)
-        }
+    private fun initFlutterEngine(initialRoute: String): FlutterEngine {
+        val engine = FlutterEngine(requireContext())
+        engine.navigationChannel.setInitialRoute(initialRoute)
+        engine.dartExecutor.executeDartEntrypoint(DartExecutor.DartEntrypoint.createDefault())
+        FlutterEngineCache
+            .getInstance()
+            .put(engineId_white, engine)
+        return engine
+    }
 
-        btnStartFlutterViewWhite.setOnClickListener {
-            val flutterFragment: FlutterFragment =
-                withCachedEngine(engineId_white)
-                    .shouldAttachEngineToActivity(false)
-                    .build()
-            addView(flutterFragment)
-            GlobalScope.launch(Dispatchers.Main) {
-                delay(TimeUnit.SECONDS.toMillis(3))
-                //Methods marked with @UiThread must be executed on the main thread.
-                methodChannel.invokeMethod("hello", "from android")
-            }
+    /**Отправим команду из натива, например пришла команда от сервера и надо передать ее во флаттер*/
+    private fun pushMessageToFlutterAfterLaunch() {
+        GlobalScope.launch(Dispatchers.Main) {
+            delay(TimeUnit.SECONDS.toMillis(3))
+            //Methods marked with @UiThread must be executed on the main thread.
+            methodChannel.invokeMethod("hello", "from android")
         }
     }
 
@@ -119,6 +120,5 @@ class SecondFragment : FlutterFragment(), Pigeon.Api {
     private fun showToast(message: String) {
         Toast.makeText(context, message, Toast.LENGTH_LONG).show()
     }
-
 
 }

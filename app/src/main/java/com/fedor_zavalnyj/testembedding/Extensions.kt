@@ -1,20 +1,11 @@
 package com.fedor_zavalnyj.testembedding
 
-import android.view.View
-import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
-import io.flutter.embedding.android.FlutterFragment
-import io.flutter.embedding.engine.FlutterEngine
-import io.flutter.plugin.common.MethodChannel
-import kotlinx.android.synthetic.main.second_fragment.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
 
+/**fragment*/
 inline fun FragmentManager.inTransaction(func: FragmentTransaction.() -> Unit) {
     val fragmentTransaction = beginTransaction()
     fragmentTransaction.func()
@@ -33,6 +24,7 @@ fun FragmentActivity.addFragment(
 }
 
 
+/**view*/
 inline fun FragmentManager.inTransactionFr(func: FragmentTransaction.() -> Unit) {
     val fragmentTransaction = beginTransaction()
     fragmentTransaction.func()
@@ -48,6 +40,4 @@ fun Fragment.addView(
         if (addToBackStack)
             addToBackStack(fragment::class.simpleName)
     }
-
-
 }

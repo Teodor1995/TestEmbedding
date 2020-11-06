@@ -29,11 +29,6 @@ class FirstFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        btnStartFlutterActivity.setOnClickListener {
-            startActivity(
-                FlutterActivity.createDefaultIntent(requireContext())
-            )
-        }
 
         /**Предпрогрев flutter engine*/
         val flutterEngine = FlutterEngine(requireContext());
@@ -42,6 +37,12 @@ class FirstFragment : Fragment() {
             .getInstance()
             .put(engineId, flutterEngine)
         /**    ******             */
+
+        btnStartFlutterActivity.setOnClickListener {
+            startActivity(
+                FlutterActivity.createDefaultIntent(requireContext())
+            )
+        }
 
         btnStartPreWarmedFlutterActivity.setOnClickListener {
             startActivity(
